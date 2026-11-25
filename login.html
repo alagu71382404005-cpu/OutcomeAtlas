@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OutcomeAtlas Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4ff;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .login-box {
+            background: white;
+            max-width: 350px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px #0002;
+        }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <h1>OutcomeAtlas</h1>
+    <h2>Welcome Back!</h2>
+
+    <form id="loginForm">
+
+    <input type="email" id="email"
+           placeholder="Email Address" required>
+
+    <input type="password" id="password"
+           placeholder="Password" required>
+
+    <button type="submit">Login</button>
+
+</form>
+
+<p id="loginMessage"></p>
+
+    <p>New user? <a href="signup.html">Create Account</a></p>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDII9RLwoEjecQcLY2u6tHRNwTPWTCieqE",
+    authDomain: "outcomeatlas.firebaseapp.com",
+    projectId: "outcomeatlas",
+    storageBucket: "outcomeatlas.firebasestorage.app",
+    messagingSenderId: "678341239640",
+    appId: "1:678341239640:web:f77a59ffd07b29045cbb2d"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+
+        alert("Login successful!");
+        window.location.href = "dashboard.html";
+
+    } catch (error) {
+        alert("Login failed: " + error.message);
+    }
+});
+</script>
+</body>
+</html>
