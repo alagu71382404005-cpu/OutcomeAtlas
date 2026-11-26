@@ -1,26 +1,112 @@
-function searchItems() {
-    const input = document.getElementById("searchInput");
-    const result = document.getElementById("result");
+const atlasData = {
+ education: [
+  {title:"Online courses",type:"Learning pathway",desc:"Structured online lessons help you study a subject at your own pace.",learn:["Explore subjects before choosing a specialisation","Learn through videos, reading and practice tasks","Build knowledge with beginner-to-advanced modules"],benefits:["Flexible learning schedule","Opportunity to practise new skills","Can support academic and career preparation"],next:"Choose a trusted learning platform, check the syllabus and time commitment, and complete a course that matches your goal."},
+  {title:"Scholarships",type:"Financial support",desc:"Scholarships may help eligible students pay for education-related expenses.",learn:["Merit-based awards","Need-based financial support","Institution, government and private-foundation schemes"],benefits:["May reduce education costs","Can help students continue their studies","Some awards include mentoring or other support"],next:"Check the official scholarship notice for eligibility, income criteria, documents, deadlines and renewal conditions. Never pay an unofficial agent."},
+  {title:"College information",type:"Higher education",desc:"Compare institutions and courses before making an admission decision.",learn:["Course structure and duration","Accreditation and recognition","Facilities, fees and placement information"],benefits:["Make informed course choices","Compare study options","Understand admission requirements"],next:"Use official college and regulator websites. Confirm recognition, fees, admission dates and course details directly with the institution."},
+  {title:"Diploma and certificate programmes",type:"Career-focused learning",desc:"Shorter or focused programmes can help build knowledge in a specific subject.",learn:["Programme outcomes","Entry requirements","Practical and theory components"],benefits:["Focused subject learning","May complement a degree","Can help explore a field"],next:"Check whether the provider and certificate are recognised by the relevant authority or employer."}
+ ],
+ careers: [
+  {title:"IT and software careers",type:"Technology",desc:"Technology roles involve designing, building, testing and maintaining digital systems.",learn:["Programming and problem solving","Software development life cycle","Teamwork, testing and documentation"],benefits:["Many specialisation paths","Opportunities to keep learning","Work across different industries"],next:"Try beginner coding exercises, build small projects and review job descriptions to understand required skills."},
+  {title:"Government careers",type:"Public service",desc:"Public-sector roles are recruited through official examinations and selection processes.",learn:["Different departments and job groups","Eligibility and examination patterns","Application and selection stages"],benefits:["A structured recruitment pathway","Roles serving the public","Clear official notifications and rules"],next:"Follow the relevant official recruitment board website. Check age, education, category rules, exam syllabus and dates in each notification."},
+  {title:"Private-sector careers",type:"Industry roles",desc:"Private organisations hire for technical, business, operations, design and support roles.",learn:["Role-specific skills","Interview and communication preparation","Workplace expectations"],benefits:["Variety of industries and roles","Different career progression paths","Scope to develop specialised skills"],next:"Compare real job descriptions, prepare a resume and portfolio, and apply through verified company career pages."},
+  {title:"Electronics and core engineering",type:"Engineering",desc:"Core engineering roles work with electronic systems, devices, testing, manufacturing and design.",learn:["Circuit and system fundamentals","Testing and troubleshooting concepts","Technical documentation"],benefits:["Connects theory with practical applications","Multiple industry specialisations","Project and lab experience can be valuable"],next:"Explore subject-related projects and check the qualifications listed by employers."},
+  {title:"Design and creative careers",type:"Creative industry",desc:"Creative roles combine visual thinking, communication and digital tools.",learn:["Design fundamentals","Creative software and workflows","Portfolio presentation"],benefits:["Build a visible body of work","Work across many sectors","Combine creativity with technology"],next:"Create sample projects, explain your design decisions and compare portfolio expectations in job listings."},
+  {title:"Business and management careers",type:"Business",desc:"Business roles support customers, teams, products, operations and organisational goals.",learn:["Communication and analysis","Planning and coordination","Basic business and data concepts"],benefits:["Transferable workplace skills","Opportunities across sectors","Potential pathways into specialist or management roles"],next:"Explore business topics, practise presentations and look for entry-level role requirements."}
+ ],
+ internships: [
+  {title:"Web development",type:"IT internship",desc:"Learn how websites are planned, built, tested and maintained using web technologies.",learn:["HTML, CSS and JavaScript basics","Responsive page design","Working with a small website project"],benefits:["A practical project for your portfolio","Understanding of front-end development","Experience collaborating and receiving feedback"],next:"Build a simple personal or student project first. Check the provider's tasks, mentor support, duration and whether the internship is paid."},
+  {title:"Python programming",type:"IT internship",desc:"Practise Python fundamentals and use code to solve small, clearly defined problems.",learn:["Variables, conditions, loops and functions","Working with files or simple data","Writing and testing small programs"],benefits:["Stronger programming foundations","Practice explaining code","A project to discuss in future applications"],next:"Complete beginner exercises and a mini project. Verify the internship syllabus and mentor details before applying."},
+  {title:"Java development",type:"IT internship",desc:"Explore object-oriented programming and the basics of building Java applications.",learn:["Java syntax and object-oriented concepts","Collections and exception handling","A small console or application project"],benefits:["Improves programming practice","Connects classroom concepts to projects","Helps explore software development"],next:"Review prerequisites and expected Java level. Ask what project, feedback and learning support are included."},
+  {title:"Artificial intelligence",type:"Emerging technology",desc:"Get an introduction to AI concepts and responsible use of data and models.",learn:["Basic AI and machine-learning ideas","Data preparation concepts","Testing and evaluating simple models"],benefits:["Understand an evolving field","Practise analytical thinking","Explore further study areas"],next:"Start with maths, Python and data basics. Check whether the programme is genuinely educational and provides supervision."},
+  {title:"Cybersecurity",type:"Technology",desc:"Learn foundational security awareness, safe computing practices and defensive concepts.",learn:["Security principles and digital hygiene","Threat awareness and risk concepts","Responsible, authorised lab exercises"],benefits:["Develops careful problem-solving","Builds security awareness","Introduces defensive technology careers"],next:"Choose a legal, beginner-friendly programme with supervised labs. Only practise in systems you own or are explicitly authorised to use."},
+  {title:"App development",type:"IT internship",desc:"Explore how mobile applications are designed, developed and tested.",learn:["User-interface basics","App development tools and workflow","Testing a small app prototype"],benefits:["A demonstrable project","Understanding mobile product design","Practice working through user needs"],next:"Check the platform, language and device requirements before joining."},
+  {title:"Embedded systems and IoT",type:"Engineering internship",desc:"Explore how microcontrollers, sensors and software work together in connected devices.",learn:["Microcontroller fundamentals","Sensor and input/output concepts","A supervised prototype project"],benefits:["Practical engineering understanding","Connects electronics and programming","Project experience"],next:"Check equipment access, safety supervision and project scope with the provider."},
+  {title:"VLSI and electronics",type:"Engineering internship",desc:"Get an introduction to digital electronics, semiconductor design concepts or electronic testing.",learn:["Digital design fundamentals","Simulation and design workflow","Basic verification concepts"],benefits:["Builds core subject knowledge","Introduces specialist engineering fields","Supports future study decisions"],next:"Review required electronics knowledge and the software tools used by the programme."},
+  {title:"Robotics",type:"Engineering internship",desc:"Explore the basics of robot systems, sensors, control and automation through guided projects.",learn:["Robot components and sensors","Basic control and programming concepts","Team-based prototype work"],benefits:["Combines several STEM subjects","Encourages practical problem-solving","Builds project teamwork"],next:"Check the project's supervision, equipment and safety arrangements."},
+  {title:"Digital marketing",type:"Business internship",desc:"Learn how organisations communicate with audiences through digital channels.",learn:["Audience and content planning","Search and social media basics","Simple campaign measurement"],benefits:["Communication and analytical practice","A sample campaign portfolio","Understanding online business"],next:"Ask what real tasks are included and avoid programmes promising guaranteed income or jobs."},
+  {title:"Graphic design",type:"Creative internship",desc:"Practise visual communication for digital and print formats.",learn:["Layout, colour and typography basics","Design tools and file formats","Creating a small design portfolio"],benefits:["Visible creative work samples","Improved visual communication","Feedback on design choices"],next:"Review mentor feedback, project ownership and portfolio-use permissions."},
+  {title:"Content writing",type:"Communication",desc:"Develop clear writing for articles, websites, product information and social media.",learn:["Research and outlining","Writing for a target audience","Editing, accuracy and citations"],benefits:["Stronger writing skills","Published or sample work, where permitted","Research and communication practice"],next:"Check editorial guidance, bylines, deadlines and whether the work is educational and appropriately supervised."},
+  {title:"Business development",type:"Business internship",desc:"Understand how organisations research customers, explain services and support business growth.",learn:["Market and customer research","Professional communication","Basic reporting and coordination"],benefits:["Confidence in professional communication","Business awareness","Teamwork and planning practice"],next:"Confirm the role is a genuine learning experience and does not require paying to obtain work."},
+  {title:"Human resources",type:"Business internship",desc:"Learn introductory concepts in recruitment coordination, workplace communication and people operations.",learn:["Recruitment process overview","Professional documentation","Workplace policies and confidentiality"],benefits:["Organisational skills","Communication practice","Understanding of people-focused roles"],next:"Check supervision and privacy practices. Interns should not be asked to handle sensitive personal data without proper safeguards."},
+  {title:"Data analytics",type:"Technology and business",desc:"Learn how data can be organised, summarised and used to answer practical questions.",learn:["Spreadsheet skills","Basic charts and data interpretation","Introductory SQL or Python concepts"],benefits:["Analytical thinking","A portfolio-ready practice project","Useful foundations across industries"],next:"Ask which tools and datasets are used and ensure data is lawful, anonymised and appropriate for learning."}
+ ],
+ skills: [
+  {title:"Technical skills",type:"Practical knowledge",desc:"Role-related abilities such as programming, electronics, data tools or design software.",learn:["Choose one skill area","Practise with guided exercises","Build a small project"],benefits:["Improves confidence with tools","Creates evidence of learning","Supports further study"],next:"Set a small weekly learning goal and keep examples of your work."},
+  {title:"Communication skills",type:"Personal development",desc:"Share ideas clearly, listen actively and communicate respectfully.",learn:["Speaking and presentation","Writing professional messages","Listening and teamwork"],benefits:["Helps in interviews and teamwork","Makes ideas easier to understand","Supports academic collaboration"],next:"Practise short presentations, group discussions and clear written summaries."},
+  {title:"Professional skills",type:"Work readiness",desc:"Everyday skills that help people work responsibly with others.",learn:["Time management and planning","Teamwork and adaptability","Problem-solving and responsibility"],benefits:["Supports project completion","Builds reliability","Helps in many study and work settings"],next:"Use a simple task planner and ask for feedback after group projects."},
+  {title:"Leadership and teamwork",type:"People skills",desc:"Coordinate tasks, include different viewpoints and help a group work toward a shared goal.",learn:["Setting shared goals","Delegating fairly","Giving and receiving feedback"],benefits:["Improves collaboration","Builds confidence","Useful in clubs and projects"],next:"Volunteer for a small team responsibility and reflect on what worked."},
+  {title:"Critical thinking",type:"Thinking skill",desc:"Evaluate information, identify assumptions and compare possible solutions.",learn:["Ask clear questions","Check evidence and sources","Compare options and trade-offs"],benefits:["Better decision-making","More thoughtful project work","Improved information literacy"],next:"When researching a topic, compare at least two reliable sources and note what each supports."},
+  {title:"Financial and digital literacy",type:"Life skill",desc:"Understand basic money concepts and use digital services safely and thoughtfully.",learn:["Budgeting basics","Online privacy and security","Recognising misleading information"],benefits:["Supports informed decisions","Encourages safer digital habits","Useful in everyday life"],next:"Learn from trusted educational sources and never share passwords or verification codes."}
+ ],
+ opportunities: [
+  {title:"Workshops",type:"Learn together",desc:"Short guided sessions introduce a topic and may include demonstrations or practice.",learn:["Topic-specific introduction","Hands-on or guided activities","Questions and discussion"],benefits:["Try a subject before deeper study","Meet other learners","Gain practical exposure"],next:"Check the organiser, agenda, date, fees, accessibility and certificate conditions."},
+  {title:"Competitions and hackathons",type:"Showcase your ideas",desc:"Organised challenges invite participants to solve a problem or present creative work.",learn:["Problem analysis","Team collaboration","Presentation and iteration"],benefits:["Practice under a time limit","Receive feedback","Showcase a project"],next:"Read the rules, team requirements, judging criteria and code of conduct before entering."},
+  {title:"Student projects",type:"Build and create",desc:"Independent or team projects turn classroom learning into something demonstrable.",learn:["Planning and research","Building and testing","Documenting the result"],benefits:["Deepens understanding","Creates portfolio evidence","Builds persistence and teamwork"],next:"Start with a small achievable idea, define the goal and document your progress."},
+  {title:"Volunteering",type:"Community participation",desc:"Contribute time and skills to a genuine community or educational initiative.",learn:["Working with different people","Planning and communication","Understanding community needs"],benefits:["Develops empathy and responsibility","Builds transferable skills","Can provide meaningful experience"],next:"Verify the organisation, duties, supervision, safety arrangements and any costs."},
+  {title:"Research opportunities",type:"Academic exploration",desc:"Explore how questions are investigated through reading, observation, experiments or analysis.",learn:["Finding and reviewing sources","Forming a research question","Recording and explaining findings"],benefits:["Develops curiosity and analytical thinking","Supports higher-study exploration","Improves academic communication"],next:"Ask a teacher or qualified mentor about suitable beginner projects and ethical requirements."},
+  {title:"Career fairs and mentoring",type:"Career exploration",desc:"Events and mentoring sessions can help students learn about industries and career routes.",learn:["Asking useful career questions","Understanding role expectations","Learning from experienced people"],benefits:["Broadens career awareness","Helps identify skills to develop","Can clarify next steps"],next:"Use reputable school, college or organisation announcements and follow event safety guidance."}
+ ],
+ resources: [
+  {title:"SWAYAM",type:"Online learning",desc:"An Indian government-supported online learning initiative with courses across many subjects.",learn:["Browse courses by subject","Review course schedules and syllabus","Check assessment and certificate rules"],benefits:["Explore structured learning","Access courses from different institutions","Support independent study"],next:"Visit the official SWAYAM portal and check current course details: https://swayam.gov.in/"},
+  {title:"NPTEL",type:"Engineering and science learning",desc:"Online courses and learning materials in engineering, science and related subjects.",learn:["Subject-based video lectures","Course assignments","Exam and certificate information"],benefits:["Strengthens academic concepts","Explore advanced subjects","Learn from university-level material"],next:"Visit the official NPTEL site and confirm current enrolment and exam information: https://nptel.ac.in/"},
+  {title:"Khan Academy",type:"Free learning resource",desc:"A learning platform with lessons and practice in subjects including mathematics and science.",learn:["Topic-based lessons","Practice questions","Self-paced revision"],benefits:["Builds foundations","Supports revision","Learn at an individual pace"],next:"Explore the official learning site: https://www.khanacademy.org/"},
+  {title:"freeCodeCamp",type:"Programming practice",desc:"A learning platform offering coding lessons and project-based practice.",learn:["Web development topics","Programming exercises","Project practice"],benefits:["Hands-on coding practice","Build examples for a portfolio","Study at your own pace"],next:"Explore the official site and its current curriculum: https://www.freecodecamp.org/"},
+  {title:"Microsoft Learn",type:"Technology learning",desc:"Official learning paths and documentation for Microsoft technologies and related skills.",learn:["Guided modules","Technical documentation","Role-based learning paths"],benefits:["Learn tools from their provider","Follow structured modules","Explore technology topics"],next:"Visit the official Microsoft Learn platform: https://learn.microsoft.com/"},
+  {title:"Google Skillshop",type:"Digital skills",desc:"Training resources for selected Google products and digital advertising topics.",learn:["Product-focused lessons","Digital marketing concepts","Assessment information"],benefits:["Understand digital tools","Explore practical marketing topics","Learn from official material"],next:"Check the official Skillshop site for current learning paths: https://skillshop.withgoogle.com/"}
+ ]
+};
 
-    const query = input.value.trim();
-
-    if (query === "") {
-        result.innerText = "Please enter something to search.";
-        return;
-    }
-
-    result.innerText = "You searched for: " + query;
+const gridIds = {education:"educationGrid",careers:"careersGrid",internships:"internshipsGrid",skills:"skillsGrid",opportunities:"opportunitiesGrid",resources:"resourcesGrid"};
+const allItems = [];
+function makeCard(item, section){
+  const card=document.createElement("article"); card.className="info-card";
+  const meta=document.createElement("span");meta.className="card-meta";meta.textContent=item.type;
+  const title=document.createElement("h3");title.textContent=item.title;
+  const desc=document.createElement("p");desc.textContent=item.desc;
+  const btn=document.createElement("button");btn.type="button";btn.textContent="View details →";
+  btn.addEventListener("click",()=>showDetails(item,section));
+  card.append(meta,title,desc,btn);return card;
 }
-
-function selectCategory(category) {
-    document.getElementById("result").innerText =
-        "You selected: " + category;
+Object.entries(gridIds).forEach(([section,id])=>{
+  const grid=document.getElementById(id);
+  atlasData[section].forEach(item=>{grid.appendChild(makeCard(item,section));allItems.push({...item,section});});
+});
+const dialog=document.getElementById("detailDialog"), dialogContent=document.getElementById("dialogContent");
+function showDetails(item,section){
+  dialogContent.replaceChildren();
+  const tag=document.createElement("span");tag.className="detail-tag";tag.textContent=section.toUpperCase();
+  const h=document.createElement("h2");h.textContent=item.title;
+  const p=document.createElement("p");p.textContent=item.desc;
+  dialogContent.append(tag,h,p);
+  [["What you can learn",item.learn],["Possible benefits",item.benefits]].forEach(([heading,arr])=>{
+    const sub=document.createElement("h3");sub.textContent=heading;dialogContent.append(sub);
+    const ul=document.createElement("ul");arr.forEach(t=>{const li=document.createElement("li");li.textContent=t;ul.append(li);});dialogContent.append(ul);
+  });
+  const next=document.createElement("h3");next.textContent="Suggested next step";
+  const nextText=document.createElement("p");nextText.textContent=item.next;
+  dialogContent.append(next,nextText);
+  const note=document.createElement("p");note.className="official-note";note.textContent="Information is a general starting guide, not a guarantee of admission, employment, stipend or certification. Verify current details with the official provider.";
+  dialogContent.append(note);
+  dialog.showModal();
 }
-
-function shareExperience() {
-    const experience = prompt("Share your experience:");
-
-    if (experience && experience.trim() !== "") {
-        alert("Thank you! Your experience: " + experience);
-    }
+document.getElementById("dialogClose").addEventListener("click",()=>dialog.close());
+dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
+const searchInput=document.getElementById("globalSearch"), results=document.getElementById("searchResults");
+function runSearch(){
+  const q=searchInput.value.trim().toLowerCase();results.replaceChildren();
+  if(!q){const p=document.createElement("p");p.textContent="Enter a topic to search.";p.style.color="#dce4fa";results.append(p);return;}
+  const matches=allItems.filter(x=>(x.title+" "+x.type+" "+x.desc+" "+x.learn.join(" ")+" "+x.benefits.join(" ")).toLowerCase().includes(q));
+  if(!matches.length){const p=document.createElement("p");p.textContent="No matching items found. Try another keyword.";p.style.color="#dce4fa";results.append(p);return;}
+  matches.slice(0,9).forEach(item=>{
+    const b=document.createElement("button");b.className="result-chip";b.type="button";
+    const strong=document.createElement("b");strong.textContent=item.title;
+    const small=document.createElement("span");small.textContent=item.section+" · "+item.type;
+    b.append(strong,small);b.addEventListener("click",()=>showDetails(item,item.section));results.append(b);
+  });
 }
+document.getElementById("searchButton").addEventListener("click",runSearch);
+searchInput.addEventListener("keydown",e=>{if(e.key==="Enter")runSearch();});
+const menuToggle=document.getElementById("menuToggle"),nav=document.getElementById("mainNav");
+menuToggle.addEventListener("click",()=>{const open=nav.classList.toggle("open");menuToggle.setAttribute("aria-expanded",String(open));});
+nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{nav.classList.remove("open");menuToggle.setAttribute("aria-expanded","false");}));
+document.getElementById("year").textContent=new Date().getFullYear();
